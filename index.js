@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express");
 const axios = require("axios")
 const app = express();
@@ -7,6 +8,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors');
 app.use(bodyParser.json())
 app.use(cors());
+const PORT = process.env.PORT || 3000;
 
 // Получение списка книг в books
 const books = [];
@@ -106,4 +108,6 @@ app.post('/api/user/login', async function(req, res) {
     res.status(201).json({ id: 1, mail: "test@mail.ru" })
 })
 
-app.listen(3000);
+app.listen(PORT, ()=> {
+    console.log(`Listening port ${PORT}`)
+});
