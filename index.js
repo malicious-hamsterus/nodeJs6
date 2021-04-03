@@ -28,11 +28,11 @@ const books = [];
     })
 })()
 
-app.get('/api/books', async function(req, res) {
+app.get('/api/books', function(req, res) {
     res.status(200).json(books)
 })
 
-app.get('/api/books/:id', async function(req, res) {
+app.get('/api/books/:id', function(req, res) {
     const book = books.find(item => item.id == req.params.id)
     if(!book) {
         res.status(404).json({
@@ -44,7 +44,7 @@ app.get('/api/books/:id', async function(req, res) {
     res.status(200).json(book)
 })
 
-app.post('/api/books', async function(req, res) {
+app.post('/api/books', function(req, res) {
     const check = checkBook(req.body)
     if(check.length) {
         res.status(500).json({
@@ -70,7 +70,7 @@ app.post('/api/books', async function(req, res) {
     })
 })
 
-app.put('/api/books/:id', async function(req, res) {
+app.put('/api/books/:id', function(req, res) {
     const book = books.find(item => item.id == req.params.id)
     if(!book) {
         res.status(404).json({
@@ -91,7 +91,7 @@ app.put('/api/books/:id', async function(req, res) {
     })
 })
 
-app.delete('/api/books/:id', async function(req, res) {
+app.delete('/api/books/:id', function(req, res) {
     const bookIndex = books.findIndex(item => item.id == req.params.id)
     if(bookIndex === -1) {
         res.status(404).json({
@@ -104,7 +104,7 @@ app.delete('/api/books/:id', async function(req, res) {
     res.status(200).json('ok')
 })
 
-app.post('/api/user/login', async function(req, res) {
+app.post('/api/user/login', function(req, res) {
     res.status(201).json({ id: 1, mail: "test@mail.ru" })
 })
 
