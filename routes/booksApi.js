@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
       cb(null, path.parse(file.originalname).name + '-' + Date.now() + path.parse(file.originalname).ext)
     }
-  })
+})
 
 const fileFilter = function(req, file, cb) {
     if (allowTypes.indexOf(path.parse(file.originalname).ext.toUpperCase()) !== -1) {
@@ -39,20 +39,35 @@ const upload = multer({ storage : storage, fileFilter : fileFilter }).single('fi
 // Получение списка книг в books
 const books = [];
 (async () => {
-    const {data} = await axios.get('http://api.itbook.store/1.0/search/new')
-    data.books.map(book => {
+    let data
+    try {
+        data = await axios.get('http://api.itbook.store/1.0/search/new')
+        data.data.books.map(book => {
+            newBook = {
+                id: generateUniqueId(),
+                title: book.title,
+                description: book.subtitle,
+                authors: "Какие-то авторы",
+                favorite: "фавориты",
+                fileCover: book.url,
+                fileName: "имяфайла",
+                fileBook: "asd"
+              }
+            books.push(newBook)
+        })
+    } catch (error) {
         newBook = {
             id: generateUniqueId(),
-            title: book.title,
-            description: book.subtitle,
+            title: 'book.title',
+            description: 'book.subtitle',
             authors: "Какие-то авторы",
             favorite: "фавориты",
-            fileCover: book.url,
+            fileCover: 'book.url',
             fileName: "имяфайла",
             fileBook: "asd"
           }
         books.push(newBook)
-    })
+    }
 })()
 
 router.get('/', (req, res) => {
@@ -103,7 +118,7 @@ router.post('/', (req, res) => {
             description: req.body.description,
             authors: req.body.authors,
             favorite: req.body.favorite || 'Нет',
-            fileCover: req.file.path,
+            fileCover: req.file ?  req.file.path : '',
             fileName: req.file.originalname
         }
         books.push(newBook)
